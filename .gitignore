@@ -46,3 +46,4 @@ yarn-error.log
 /opencode.json
 /opencode.jsonc
 /public/uploads
+/public/cv/*.pdf
