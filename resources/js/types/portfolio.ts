@@ -10,6 +10,7 @@ export interface PortfolioProject {
     users_scale: string | null;
     tech_stack: string[];
     cover_image_url: string | null;
+    icon: string | null;
     live_url: string | null;
     is_confidential: boolean;
     is_featured: boolean;

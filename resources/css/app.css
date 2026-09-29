@@ -170,13 +170,6 @@ html {
     }
 }
 
-.cover-placeholder {
-    background-color: #eff6ff;
-    background-image:
-        linear-gradient(to right, rgb(37 99 235 / 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgb(37 99 235 / 0.1) 1px, transparent 1px);
-    background-size: 28px 28px;
-}
 
 .contact-panel::before {
     content: '';
@@ -211,5 +204,47 @@ html {
     .hero-grid,
     .animate-marquee {
         animation: none;
+    }
+}
+
+/* ---- Portfolio: project thumbnails ---- */
+.project-thumb {
+    --thumb-from: #dbeafe;
+    --thumb-to: #e0f2fe;
+    background-color: #eff6ff;
+    background-image:
+        radial-gradient(circle at 50% 50%, rgb(255 255 255 / 0.85), transparent 58%),
+        linear-gradient(to right, rgb(37 99 235 / 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(37 99 235 / 0.08) 1px, transparent 1px),
+        linear-gradient(135deg, var(--thumb-from), var(--thumb-to));
+    background-size: auto, 28px 28px, 28px 28px, auto;
+    background-position: center;
+}
+
+.project-thumb[data-category='web'] {
+    --thumb-from: #e0f2fe;
+    --thumb-to: #dbeafe;
+}
+
+.project-thumb[data-category='design'] {
+    --thumb-from: #e0e7ff;
+    --thumb-to: #dbeafe;
+}
+
+.thumb-orbit {
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .thumb-orbit {
+    transform: rotate(40deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .thumb-orbit {
+        transition: none;
+    }
+
+    .group:hover .thumb-orbit {
+        transform: none;
     }
 }

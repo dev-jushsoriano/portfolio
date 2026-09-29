@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Projects\Schemas;
 
+use App\Models\Project;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
@@ -75,13 +76,18 @@ class ProjectForm
             Section::make('Media')
                 ->columnSpanFull()
                 ->schema([
+                    Select::make('icon')
+                        ->label('Thumbnail icon')
+                        ->options(Project::ICONS)
+                        ->searchable()
+                        ->helperText('Shown on a blue thumbnail when the project has no cover image.'),
                     FileUpload::make('cover_image')
                         ->disk('uploads')
                         ->directory('projects')
                         ->image()
                         ->imageEditor()
                         ->maxSize(4096)
-                        ->helperText('Blur or remove all real names, numbers and emails first.'),
+                        ->helperText('Optional. Replaces the icon thumbnail. Blur or remove all real names, numbers and emails first.'),
                     FileUpload::make('gallery')
                         ->disk('uploads')
                         ->directory('projects/gallery')

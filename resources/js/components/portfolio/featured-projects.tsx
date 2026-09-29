@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { ArrowUpRight, Globe, Layers, Lock, Palette } from 'lucide-react';
+import { ArrowUpRight, Lock } from 'lucide-react';
+import { resolveProjectIcon } from '@/components/portfolio/project-icons';
 import type { PortfolioProject, ProjectCategory } from '@/types/portfolio';
 
 const categoryLabel: Record<ProjectCategory, string> = {
@@ -7,8 +8,6 @@ const categoryLabel: Record<ProjectCategory, string> = {
     system: 'Business system',
     design: 'Design and multimedia',
 };
-
-const categoryIcon = { web: Globe, system: Layers, design: Palette };
 
 function Cover({ project, large }: { project: PortfolioProject; large: boolean }) {
     if (project.cover_image_url) {
@@ -22,10 +21,26 @@ function Cover({ project, large }: { project: PortfolioProject; large: boolean }
         );
     }
 
-    const Icon = categoryIcon[project.category] ?? Layers;
+    const Icon = resolveProjectIcon(project.icon, project.category);
+
     return (
-        <div className="cover-placeholder flex h-full w-full items-center justify-center">
-            <Icon className={`${large ? 'size-14' : 'size-10'} text-blue-600/70`} aria-hidden="true" />
+        <div
+            data-category={project.category}
+            className="project-thumb relative flex h-full min-h-56 w-full items-center justify-center overflow-hidden"
+        >
+            <span aria-hidden="true" className="absolute aspect-square h-[82%] rounded-full border border-blue-400/25" />
+            <span aria-hidden="true" className="absolute aspect-square h-[56%] rounded-full border border-blue-400/35" />
+            <span aria-hidden="true" className="thumb-orbit absolute aspect-square h-[82%]">
+                <span className="absolute top-[14%] left-[14%] size-2 rounded-full bg-blue-500/70" />
+                <span className="absolute right-[6%] bottom-[30%] size-1.5 rounded-full bg-sky-400/80" />
+            </span>
+            <span
+                className={`relative flex items-center justify-center rounded-2xl bg-white shadow-xl ring-1 shadow-blue-600/15 ring-blue-100 transition-transform duration-500 group-hover:-translate-y-1 ${
+                    large ? 'size-24 lg:size-28' : 'size-20'
+                }`}
+            >
+                <Icon className={`${large ? 'size-11 lg:size-12' : 'size-9'} text-blue-600`} strokeWidth={1.6} aria-hidden="true" />
+            </span>
         </div>
     );
 }

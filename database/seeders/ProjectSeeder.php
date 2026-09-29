@@ -14,12 +14,14 @@ class ProjectSeeder extends Seeder
      *
      * firstOrCreate() matches on the slug and only inserts missing
      * projects, so re-running this never overwrites edits made in the admin.
+     * The only exception is an empty icon, which gets filled in.
      */
     public function run(): void
     {
         $projects = [
             [
                 'title' => 'Enterprise Ticketing & Workflow Automation System',
+                'icon' => 'ticket',
                 'category' => 'system',
                 'client' => 'LausGroup of Companies',
                 'summary' => 'A centralized ticketing platform that routes support, creative and internal requests to the right team automatically.',
@@ -31,6 +33,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Customer Relationship Management System',
+                'icon' => 'crm',
                 'category' => 'system',
                 'client' => 'LausGroup of Companies',
                 'summary' => 'An in-house CRM built from scratch that centralizes customer data and workflows across the group\'s nationwide operations.',
@@ -42,6 +45,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Call Center Management System',
+                'icon' => 'headset',
                 'category' => 'system',
                 'client' => null,
                 'summary' => 'An enterprise platform for customer communication and appointment management with CRM, SMS, email and VoIP calling.',
@@ -52,6 +56,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Human Resources Management System',
+                'icon' => 'id-card',
                 'category' => 'system',
                 'client' => null,
                 'summary' => 'An internal HR platform with role-based access control, requisition approvals, applicant tracking and hiring analytics.',
@@ -60,6 +65,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Recruitment and Career Portal',
+                'icon' => 'briefcase',
                 'category' => 'web',
                 'client' => null,
                 'summary' => 'A web-based recruitment platform for publishing job openings, news and company events and receiving online applications.',
@@ -68,6 +74,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Corporate Branding Websites',
+                'icon' => 'monitor',
                 'category' => 'web',
                 'client' => null,
                 'summary' => 'Responsive corporate websites for multiple brands, with inquiry forms connected to SMS and email notifications.',
@@ -78,6 +85,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Event Tracking & Verification System',
+                'icon' => 'qr-code',
                 'category' => 'system',
                 'client' => null,
                 'summary' => 'A system for managing attendees, reservations and event activities with ticket verification and real-time monitoring.',
@@ -86,6 +94,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Scheduling and Analytics Dashboard',
+                'icon' => 'calendar',
                 'category' => 'system',
                 'client' => null,
                 'summary' => 'A centralized scheduling platform for appointments across multiple locations, with performance analytics and automated reports.',
@@ -94,6 +103,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Document Tracking System with SMS Notifications',
+                'icon' => 'file-check',
                 'category' => 'system',
                 'client' => null,
                 'summary' => 'A tracking platform for documents and assets that automatically notifies customers by SMS when items are completed or available.',
@@ -102,6 +112,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Pricing and Cost Management System',
+                'icon' => 'calculator',
                 'category' => 'system',
                 'client' => null,
                 'summary' => 'Applications for managing pricing and operational costs, with administrative reporting and financial insights.',
@@ -110,6 +121,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Event Discovery and Venue Promotion Platform',
+                'icon' => 'map-pin',
                 'category' => 'web',
                 'client' => null,
                 'summary' => 'A web platform that connects businesses with customers through event listings and promotions.',
@@ -119,6 +131,7 @@ class ProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Operations and Monitoring Platform',
+                'icon' => 'gauge',
                 'category' => 'system',
                 'client' => null,
                 'summary' => 'An all-in-one business management system combining CRM, sales monitoring, equipment tracking and reporting.',
@@ -128,7 +141,7 @@ class ProjectSeeder extends Seeder
         ];
 
         foreach ($projects as $index => $data) {
-            Project::firstOrCreate(
+            $project = Project::firstOrCreate(
                 ['slug' => Str::slug($data['title'])],
                 array_merge([
                     'client' => null,
@@ -142,6 +155,11 @@ class ProjectSeeder extends Seeder
                     'sort_order' => $index + 1,
                 ], $data)
             );
+
+            // Fill in an icon for existing projects, without touching one set in the admin.
+            if (blank($project->icon) && ! empty($data['icon'])) {
+                $project->update(['icon' => $data['icon']]);
+            }
         }
 
         $this->command->info(count($projects).' projects checked. Review them in /admin before publishing.');

@@ -29,6 +29,7 @@ class HomeController extends Controller
                 'cover_image_url' => $project->cover_image
                     ? Storage::disk('uploads')->url($project->cover_image)
                     : null,
+                'icon' => $project->icon,
                 'live_url' => $project->live_url,
                 'is_confidential' => $project->is_confidential,
                 'is_featured' => $project->is_featured,
