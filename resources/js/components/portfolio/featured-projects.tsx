@@ -1,5 +1,6 @@
+import { Link } from '@inertiajs/react';
 import { motion, useReducedMotion } from 'motion/react';
-import { ArrowUpRight, Lock } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Lock } from 'lucide-react';
 import { resolveProjectIcon } from '@/components/portfolio/project-icons';
 import type { PortfolioProject, ProjectCategory } from '@/types/portfolio';
 
@@ -45,9 +46,16 @@ function Cover({ project, large }: { project: PortfolioProject; large: boolean }
     );
 }
 
-function ProjectCard({ project, index }: { project: PortfolioProject; index: number }) {
+export function ProjectCard({
+    project,
+    index,
+    large = false,
+}: {
+    project: PortfolioProject;
+    index: number;
+    large?: boolean;
+}) {
     const reduce = useReducedMotion();
-    const large = index === 0;
 
     return (
         <motion.article
@@ -56,7 +64,7 @@ function ProjectCard({ project, index }: { project: PortfolioProject; index: num
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, delay: reduce ? 0 : (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
             className={`group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white transition-[border-color,box-shadow] duration-300 hover:border-blue-200 hover:shadow-[0_24px_50px_-28px_rgba(37,99,235,0.45)] ${
-                large ? 'lg:col-span-2 lg:flex-row' : ''
+                large ? 'md:col-span-2 lg:flex-row' : ''
             }`}
         >
             <div className={`aspect-[16/10] overflow-hidden bg-slate-100 ${large ? 'lg:aspect-auto lg:w-[55%]' : ''}`}>
@@ -112,7 +120,7 @@ function ProjectCard({ project, index }: { project: PortfolioProject; index: num
     );
 }
 
-export function FeaturedProjects({ projects }: { projects: PortfolioProject[] }) {
+export function FeaturedProjects({ projects, totalProjects }: { projects: PortfolioProject[]; totalProjects: number }) {
     return (
         <section id="projects" className="scroll-mt-20 bg-slate-50 py-24 md:py-32">
             <div className="mx-auto max-w-6xl px-6">
@@ -126,13 +134,25 @@ export function FeaturedProjects({ projects }: { projects: PortfolioProject[] })
                 {projects.length > 0 ? (
                     <div className="mt-14 grid gap-6 md:grid-cols-2">
                         {projects.map((project, index) => (
-                            <ProjectCard key={project.id} project={project} index={index} />
+                            <ProjectCard key={project.id} project={project} index={index} large={index === 0} />
                         ))}
                     </div>
                 ) : (
                     <p className="mt-14 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-slate-600">
                         No published projects yet. In the admin panel, open a project and switch on Published to show it here.
                     </p>
+                )}
+
+                {totalProjects > projects.length && (
+                    <div className="mt-12 flex justify-center">
+                        <Link
+                            href="/projects"
+                            className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-800 transition-colors hover:border-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                            View all {totalProjects} projects
+                            <ArrowRight className="size-4" aria-hidden="true" />
+                        </Link>
+                    </div>
                 )}
             </div>
         </section>

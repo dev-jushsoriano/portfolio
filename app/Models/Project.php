@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Project extends Model
 {
@@ -48,6 +49,30 @@ class Project extends Model
             'is_confidential' => 'boolean',
             'is_featured' => 'boolean',
             'is_published' => 'boolean',
+        ];
+    }
+
+    /**
+     * The fields the public site needs for a project card.
+     */
+    public function toCard(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'category' => $this->category,
+            'client' => $this->client,
+            'summary' => $this->summary,
+            'users_scale' => $this->users_scale,
+            'tech_stack' => $this->tech_stack ?? [],
+            'cover_image_url' => $this->cover_image
+                ? Storage::disk('uploads')->url($this->cover_image)
+                : null,
+            'icon' => $this->icon,
+            'live_url' => $this->live_url,
+            'is_confidential' => $this->is_confidential,
+            'is_featured' => $this->is_featured,
         ];
     }
 }

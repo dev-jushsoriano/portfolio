@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { profile } from '@/data/profile';
 
 const links = [
-    { href: '#services', label: 'Services' },
-    { href: '#projects', label: 'Projects' },
-    { href: '#experience', label: 'Experience' },
+    { href: '/#services', label: 'Services' },
+    { href: '/projects', label: 'Projects' },
+    { href: '/#experience', label: 'Experience' },
 ];
 
 export function SiteHeader({ cvUrl }: { cvUrl: string | null }) {
@@ -34,7 +34,7 @@ export function SiteHeader({ cvUrl }: { cvUrl: string | null }) {
                 style={{ scaleX: progress }}
             />
             <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6" aria-label="Main">
-                <a href="#top" className="font-display text-lg font-semibold tracking-tight text-slate-900">
+                <a href="/" className="font-display text-lg font-semibold tracking-tight text-slate-900">
                     {profile.name}
                 </a>
 
@@ -59,7 +59,7 @@ export function SiteHeader({ cvUrl }: { cvUrl: string | null }) {
                         </a>
                     )}
                     <a
-                        href="#contact"
+                        href="/#contact"
                         className="rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     >
                         Contact me
@@ -79,7 +79,7 @@ export function SiteHeader({ cvUrl }: { cvUrl: string | null }) {
 
             {open && (
                 <div className="border-t border-slate-200 px-6 pb-6 md:hidden">
-                    {[...links, { href: '#contact', label: 'Contact' }].map((link) => (
+                    {[...links, { href: '/#contact', label: 'Contact' }].map((link) => (
                         <a
                             key={link.href}
                             href={link.href}

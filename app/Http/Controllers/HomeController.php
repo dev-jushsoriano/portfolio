@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -11,37 +10,26 @@ class HomeController extends Controller
 {
     private const CV_PATH = 'cv/Justine-Soriano-CV.pdf';
 
+    // One large card plus a 2x2 grid keeps the section balanced.
+    private const HOMEPAGE_LIMIT = 5;
+
     public function __invoke(): Response
     {
-        $projects = Project::query()
-            ->where('is_published', true)
+        $published = Project::query()->where('is_published', true);
+
+        $projects = (clone $published)
             ->orderByDesc('is_featured')
             ->orderBy('sort_order')
-            ->limit(6)
+            ->limit(self::HOMEPAGE_LIMIT)
             ->get()
-            ->map(fn (Project $project) => [
-                'id' => $project->id,
-                'title' => $project->title,
-                'slug' => $project->slug,
-                'category' => $project->category,
-                'client' => $project->client,
-                'summary' => $project->summary,
-                'users_scale' => $project->users_scale,
-                'tech_stack' => $project->tech_stack ?? [],
-                'cover_image_url' => $project->cover_image
-                    ? Storage::disk('uploads')->url($project->cover_image)
-                    : null,
-                'icon' => $project->icon,
-                'live_url' => $project->live_url,
-                'is_confidential' => $project->is_confidential,
-                'is_featured' => $project->is_featured,
-            ]);
+            ->map(fn (Project $project) => $project->toCard());
 
         // Only show the CV button once the PDF has actually been uploaded.
         $cvUrl = file_exists(public_path(self::CV_PATH)) ? asset(self::CV_PATH) : null;
 
         return Inertia::render('home', [
             'projects' => $projects,
+            'totalProjects' => $published->count(),
             'cvUrl' => $cvUrl,
         ])->withViewData([
             // Rendered by app.blade.php on the server, so Google, LinkedIn and
