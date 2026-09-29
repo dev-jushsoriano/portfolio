@@ -1,5 +1,5 @@
 import { motion, useScroll, useSpring } from 'motion/react';
-import { Menu, X } from 'lucide-react';
+import { Download, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { profile } from '@/data/profile';
 
@@ -9,7 +9,7 @@ const links = [
     { href: '#experience', label: 'Experience' },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ cvUrl }: { cvUrl: string | null }) {
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
     const { scrollYProgress } = useScroll();
@@ -48,6 +48,16 @@ export function SiteHeader() {
                             {link.label}
                         </a>
                     ))}
+                    {cvUrl && (
+                        <a
+                            href={cvUrl}
+                            download="Justine-Soriano-CV.pdf"
+                            className="inline-flex items-center gap-1.5 text-sm text-slate-600 transition-colors hover:text-blue-600 focus-visible:text-blue-600"
+                        >
+                            <Download className="size-4" aria-hidden="true" />
+                            Download CV
+                        </a>
+                    )}
                     <a
                         href="#contact"
                         className="rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -79,6 +89,17 @@ export function SiteHeader() {
                             {link.label}
                         </a>
                     ))}
+                    {cvUrl && (
+                        <a
+                            href={cvUrl}
+                            download="Justine-Soriano-CV.pdf"
+                            onClick={() => setOpen(false)}
+                            className="mt-4 flex items-center justify-center gap-2 rounded-full border border-slate-300 py-3 text-sm font-medium text-slate-800"
+                        >
+                            <Download className="size-4" aria-hidden="true" />
+                            Download CV
+                        </a>
+                    )}
                 </div>
             )}
         </header>

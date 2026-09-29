@@ -10,12 +10,12 @@ import { StackMarquee } from '@/components/portfolio/stack-marquee';
 import { StatsBand } from '@/components/portfolio/stats-band';
 import type { PortfolioProject } from '@/types/portfolio';
 
-export default function Home({ projects }: { projects: PortfolioProject[] }) {
+export default function Home({ projects, cvUrl }: { projects: PortfolioProject[]; cvUrl: string | null }) {
     return (
         <>
             <Head title="Full-Stack Web Developer" />
             <div className="min-h-screen bg-white font-body text-slate-900 antialiased selection:bg-blue-100">
-                <SiteHeader />
+                <SiteHeader cvUrl={cvUrl} />
                 <main>
                     <Hero />
                     <StatsBand />
@@ -23,7 +23,7 @@ export default function Home({ projects }: { projects: PortfolioProject[] }) {
                     <FeaturedProjects projects={projects} />
                     <StackMarquee />
                     <ExperienceTimeline />
-                    <ContactPanel />
+                    <ContactPanel cvUrl={cvUrl} />
                 </main>
                 <SiteFooter />
             </div>

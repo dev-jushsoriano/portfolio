@@ -1,5 +1,5 @@
 import { useForm } from '@inertiajs/react';
-import { CheckCircle2, Mail } from 'lucide-react';
+import { CheckCircle2, Download, Mail } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { profile } from '@/data/profile';
 
@@ -23,7 +23,7 @@ function FieldError({ id, message }: { id: string; message?: string }) {
     );
 }
 
-export function ContactPanel() {
+export function ContactPanel({ cvUrl }: { cvUrl: string | null }) {
     const form = useForm<ContactForm>({ name: '', email: '', company: '', message: '', website: '' });
     const [sent, setSent] = useState(false);
 
@@ -53,6 +53,18 @@ export function ContactPanel() {
                         <Mail className="size-4" aria-hidden="true" />
                         {profile.email}
                     </a>
+                    {cvUrl && (
+                        <div className="mt-8">
+                            <a
+                                href={cvUrl}
+                                download="Justine-Soriano-CV.pdf"
+                                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            >
+                                <Download className="size-4" aria-hidden="true" />
+                                Download my CV
+                            </a>
+                        </div>
+                    )}
                 </div>
 
                 <div className="relative rounded-2xl bg-white p-6 text-slate-900 shadow-2xl shadow-blue-900/20 sm:p-8">
